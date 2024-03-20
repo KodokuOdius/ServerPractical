@@ -35,13 +35,14 @@ def topic(request, topic_id):
 def new_topic(request):
     """Определяет новую тему."""
     if request.method != 'POST':
-        # Данные не отправлялись; создается пустая форма.
         form = TopicForm()
     else:
         # Отправлены данные POST; обработать данные.
         form = TopicForm(data=request.POST)
         if form.is_valid():
-            form.save()
+            new_form = form.save(commit=False)
+            new_form.owner = request.user
+            new_form.save()
             return redirect('learning_logs:topics')
     # Вывести пустую или недействительную форму.
     context = {'form': form}
