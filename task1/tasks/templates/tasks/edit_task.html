@@ -1,0 +1,14 @@
+{% extends "tasks/base.html" %}
+{% block content %}
+<div class="form-wrapper">
+    <p class="lead">
+        <a href="{% url 'tasks:task' task.id %}">{{ task.title }}</a>
+    </p>
+    <h2 class="display-5">Edit Task</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Save Changes</button>
+    </form>
+</div>
+{% endblock content %}

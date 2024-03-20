@@ -1,0 +1,40 @@
+{% extends "tasks/base.html" %}
+{% block content %}
+<p>Tasks - <a href="{% url 'tasks:new_task' %}">Add a new task:</a></p>
+<ul class="list-group">
+    {% for task in tasks %}
+    <li style="border: 1px solid black; padding: 10px; margin-bottom: 10px; " class="list-group-item">
+        <div class="form-group">
+            <b><a class="text-decoration-none" href="{% url 'tasks:task' task.id %}" style="font-size: 20px;">{{ task.title }}</a></b>
+        </div>
+        <div class="form-group">
+            <label class="form-label">Assigner: </label>
+            <p class="lead" style="display: contents;">{{ task.assigner }}</p>
+        </div>
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label class="form-label">Start Date:</label>
+                <input class="form-control" type="date" id="start_date{{ task.id }}" value="{{ task.start_date|date:'Y-m-d' }}" readonly style="width: auto;">
+            </div>
+            <div class="form-group">
+                <label class="form-label">End Date:</label>
+                <input class="form-control" type="date" id="end_date{{ task.id }}" value="{{ task.end_date|date:'Y-m-d' }}" readonly style="width: auto;">
+            </div>
+            <br>
+            <label>Priority:</label>
+            <i>{{ task.get_priority_display }}</i>
+            <br>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="completed{{ task.id }}" {% if task.completed%}checked{% endif %} disabled>
+                <label class="form-check-label">Completed</label>
+            </div>
+            <input type="hidden" value="{{ task.id }}">
+        </form>
+    </li>
+    {% empty %}
+    <li class="list-group-item">No tasks ¯\_(ツ)_/¯</li>
+    {% endfor %}
+</ul>
+
+{% endblock content %}
